@@ -1,0 +1,9 @@
+Relationships:
+A{
+	? B
+	? C
+}
+
+Constraints:
+B excludes C
+B requires C

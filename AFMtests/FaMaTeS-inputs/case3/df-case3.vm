@@ -1,0 +1,13 @@
+Relationships:
+A{
+	B
+	C  {
+		someOf {
+			D
+			E	 		
+		}
+	}
+}
+
+Constraints:
+B excludes D

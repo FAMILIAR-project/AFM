@@ -1,0 +1,10 @@
+Relationships:
+A{
+	oneOf {
+			B
+			C	 		
+	} 
+}
+
+Constraints:
+B requires C
