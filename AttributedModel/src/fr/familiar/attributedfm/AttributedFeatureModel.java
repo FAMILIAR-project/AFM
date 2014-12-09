@@ -312,4 +312,25 @@ public class AttributedFeatureModel {
 		}
 		return res;
 	}
+	
+	public void compose(AttributedFeatureModel fm2){
+		
+		//mergin off the trees
+		Feature newRoot = new Feature("Fake root");
+		
+		Relation r = new Relation("oldmodelRel");
+		r.addCardinality(new Cardinality(1, 1));
+		r.addDestination(this.root);
+		r.setParent(newRoot);
+		Relation r2 = new Relation("newModelRel");
+		r2.addCardinality(new Cardinality(1, 1));
+		r2.addDestination(fm2.root);
+		r2.setParent(newRoot);
+		
+		this.root=newRoot;
+		
+		this.constraints.addAll(fm2.getConstraints());
+		
+
+	}
 }
