@@ -17,6 +17,29 @@
  */
 package es.us.isa.ChocoReasoner.pairwise;
 
+import static choco.Choco.and;
+import static choco.Choco.constant;
+import static choco.Choco.div;
+import static choco.Choco.eq;
+import static choco.Choco.geq;
+import static choco.Choco.gt;
+import static choco.Choco.ifOnlyIf;
+import static choco.Choco.ifThenElse;
+import static choco.Choco.implies;
+import static choco.Choco.leq;
+import static choco.Choco.lt;
+import static choco.Choco.makeIntVar;
+import static choco.Choco.minus;
+import static choco.Choco.mod;
+import static choco.Choco.mult;
+import static choco.Choco.neg;
+import static choco.Choco.neq;
+import static choco.Choco.not;
+import static choco.Choco.or;
+import static choco.Choco.plus;
+import static choco.Choco.power;
+import static choco.Choco.sum;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,12 +47,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
-import static choco.Choco.*;
 import choco.cp.model.CPModel;
 import choco.kernel.model.Model;
 import choco.kernel.model.constraints.Constraint;
@@ -41,13 +63,8 @@ import fr.familiar.attributedfm.GenericAttribute;
 import fr.familiar.attributedfm.Relation;
 import fr.familiar.attributedfm.VariabilityElement;
 import fr.familiar.attributedfm.domain.Cardinality;
-import fr.familiar.attributedfm.domain.IntegerDomain;
 import fr.familiar.attributedfm.domain.KeyWords;
-import fr.familiar.attributedfm.domain.ObjectDomain;
 import fr.familiar.attributedfm.domain.Range;
-import fr.familiar.attributedfm.domain.RangeIntegerDomain;
-import fr.familiar.attributedfm.domain.SetIntegerDomain;
-import fr.familiar.attributedfm.domain.SetRealDomain;
 import fr.familiar.attributedfm.reasoning.FeatureModelReasoner;
 import fr.familiar.attributedfm.util.Node;
 import fr.familiar.attributedfm.util.Tree;
@@ -255,89 +272,59 @@ public class ChocoReasoner extends FeatureModelReasoner {
 			String attName = f.getName() + "." + att.getName();
 			fr.familiar.attributedfm.domain.Domain d = att.getDomain();
 			Object nullValue = att.getNullValue();
-			Integer intNullVal = 0;
-			if (d instanceof RangeIntegerDomain) {
-				intNullVal = att.getIntegerValue(nullValue);
-				RangeIntegerDomain rangeDom = (RangeIntegerDomain) d;
-				Iterator<Range> itRanges = rangeDom.getRanges().iterator();
+			Integer intNullVal = null;
+			
+			if(d.getType().equals("INTEGER_BOUNDED")){
+				intNullVal=(Integer)nullValue;
 				int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-
-				while (itRanges.hasNext()) {
-					Range r = itRanges.next();
-					if (r.getMin() < min) {
-						min = r.getMin();
+				for(Range r:d.getRanges()){
+					if ((Integer)r.getMin() < min) {
+						min = (int) r.getMin();
 					}
-					if (r.getMax() > max) {
-						max = r.getMax();
+					if ((Integer)r.getMax() > max) {
+						max = (int) r.getMax();
 					}
+					
 				}
-
 				if (intNullVal > max) {
 					max = intNullVal;
 				} else if (intNullVal < min) {
 					min = intNullVal;
 				}
-				// creamos la vble con el rango
 				if(att.nonDesicion){
-				attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-						+ p.featureb.getName(), min, max, "cp:bound","cp:no_decision");
-				}else{
 					attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-							+ p.featureb.getName(), min, max, "cp:bound");
-				}
-			} else if (d instanceof SetIntegerDomain) {
-				intNullVal = att.getIntegerValue(nullValue);
+							+ p.featureb.getName(), min, max, "cp:bound","cp:no_decision");
+					}else{
+						attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
+								+ p.featureb.getName(), min, max, "cp:bound");
+					}
+			}else if(d.getType().equals("INTEGER_NOT_BOUNDED")||d.getType().equals("STRING")){
+				intNullVal=(Integer)nullValue;
 
-				SetIntegerDomain setDom = (SetIntegerDomain) d;
-				List<Integer> allowedVals = new LinkedList<Integer>();
-				allowedVals.addAll(setDom.getAllIntegerValues());
-				allowedVals.add(intNullVal);
-				// attVar = makeIntVar(attName,
-				// allowedVals,"cp:bound","cp:no_decision");
-				int[] valsArray = new int[allowedVals.size()];
-				Iterator<Integer> itValues = allowedVals.iterator();
+				Collection<Object> objs = new LinkedList<Object>();
+				for(Range r:d.getRanges()){
+					objs.addAll(r.getItems());
+				}
+				int[] valsArray = new int[objs.size()];
+				Iterator<Object> itValues = objs.iterator();
 				int i = 0;
 				while (itValues.hasNext()) {
-					valsArray[i] = itValues.next();
+					valsArray[i] = (Integer)itValues.next();
 					i++;
 				}
-				// attVar = makeIntVar(attName,
-				// allowedVals,"cp:bound","cp:no_decision");
 				if(att.nonDesicion){
-				attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-						+ p.featureb.getName(), valsArray, "cp:enum","cp:no_decision");
-				}else{
 					attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-							+ p.featureb.getName(), valsArray, "cp:enum");
-				}
-			} else if (d instanceof ObjectDomain) {
-				intNullVal = att.getIntegerValue(nullValue);
-				ObjectDomain objDom = (ObjectDomain) d;
-				List<Integer> allowedVals = new LinkedList<Integer>();
-				allowedVals.addAll(objDom.getAllIntegerValues());
-				allowedVals.add(intNullVal);
-				int[] valsArray = new int[allowedVals.size()];
-				Iterator<Integer> itValues = allowedVals.iterator();
-				int i = 0;
-				while (itValues.hasNext()) {
-					valsArray[i] = itValues.next();
-					i++;
-				}
-				// attVar = makeIntVar(attName,
-				// allowedVals,"cp:bound","cp:no_decision");
-				if(att.nonDesicion){
-
-				attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-						+ p.featureb.getName(), valsArray, "cp:enum","cp:no_decision");
-				}else{
-					attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
-							+ p.featureb.getName(), valsArray, "cp:enum");
-				}
-			} else if (d instanceof SetRealDomain) {
-				System.err.println("We do not support reals by now");
+							+ p.featureb.getName(), valsArray, "cp:enum","cp:no_decision");
+					}else{
+						attVar = makeIntVar(attName+"_" + p.featurea.getName() + "+"
+								+ p.featureb.getName(), valsArray, "cp:enum");
+					}
 			} else {
-				System.err.println("Unknown rare domain type");
+				System.err.println("You're ussing not supported domain types in this reasoner");
 			}
+			
+			
+			
 			attVars.get(p).put(attName, attVar);
 			atts.get(p).put(attName, att);
 			problem.addVariable(attVar);
@@ -345,53 +332,53 @@ public class ChocoReasoner extends FeatureModelReasoner {
 			// si la feature esta presente, tenemos en cuenta el dominio. si
 			// no,
 			// valor nulo
-			Constraint domain = setAttributeDomain(attVar, att);
-			Constraint reifiedDomain = ifThenElse(geq(varFeat, 1), domain,
-					eq(attVar, intNullVal));
+		//	Constraint domain = setAttributeDomain(attVar, att);
+		//	Constraint reifiedDomain = ifThenElse(geq(varFeat, 1), domain,	eq(attVar, intNullVal));
+			Constraint reifiedDomain= ifOnlyIf(eq(varFeat, 0),(eq(attVar,intNullVal)));
 			problem.addConstraint(reifiedDomain);
 		}
 		// return varFeat;
 
 	}
 
-	protected Constraint setAttributeDomain(IntegerVariable var,
-			GenericAttribute att) {
-
-		Constraint res = null;
-		fr.familiar.attributedfm.domain.Domain d = att.getDomain();
-
-		if (d instanceof RangeIntegerDomain) {
-			RangeIntegerDomain rangeDom = (RangeIntegerDomain) d;
-			Iterator<Range> it = rangeDom.getRanges().iterator();
-			if (it.hasNext()) {
-				Range r = it.next();
-				// var >= min && var <= max
-				res = and(leq(var, r.getMax()), geq(var, r.getMin()));
-			}
-			while (it.hasNext()) {
-				Range r = it.next();
-				// var >= min && var <= max
-				Constraint c = and(leq(var, r.getMax()), geq(var, r.getMin()));
-				res = or(res, c);
-			}
-		} else if ((d instanceof SetIntegerDomain)
-				|| (d instanceof ObjectDomain)) {
-			// SetIntegerDomain setDom = (SetIntegerDomain)d;
-			Iterator<Integer> it = d.getAllIntegerValues().iterator();
-			if (it.hasNext()) {
-				int i = it.next();
-				res = (eq(var, i));
-			}
-			while (it.hasNext()) {
-				int i = it.next();
-				Constraint c = (eq(var, i));
-				res = or(res, c);
-			}
-		}
-
-		return res;
-
-	}
+//	protected Constraint setAttributeDomain(IntegerVariable var,
+//			GenericAttribute att) {
+//
+//		Constraint res = null;
+//		fr.familiar.attributedfm.domain.Domain d = att.getDomain();
+//
+//		if (d instanceof RangeIntegerDomain) {
+//			RangeIntegerDomain rangeDom = (RangeIntegerDomain) d;
+//			Iterator<Range> it = rangeDom.getRanges().iterator();
+//			if (it.hasNext()) {
+//				Range r = it.next();
+//				// var >= min && var <= max
+//				res = and(leq(var, r.getMax()), geq(var, r.getMin()));
+//			}
+//			while (it.hasNext()) {
+//				Range r = it.next();
+//				// var >= min && var <= max
+//				Constraint c = and(leq(var, r.getMax()), geq(var, r.getMin()));
+//				res = or(res, c);
+//			}
+//		} else if ((d instanceof SetIntegerDomain)
+//				|| (d instanceof ObjectDomain)) {
+//			// SetIntegerDomain setDom = (SetIntegerDomain)d;
+//			Iterator<Integer> it = d.getAllIntegerValues().iterator();
+//			if (it.hasNext()) {
+//				int i = it.next();
+//				res = (eq(var, i));
+//			}
+//			while (it.hasNext()) {
+//				int i = it.next();
+//				Constraint c = (eq(var, i));
+//				res = or(res, c);
+//			}
+//		}
+//
+//		return res;
+//
+//	}
 
 	@Override
 	public void addSet(Relation rel, Feature parent,
@@ -839,7 +826,7 @@ public class ChocoReasoner extends FeatureModelReasoner {
 			} else {
 				// es una constante, usamos el intConverter
 				// XXX asi en teoria debe funcionar :)
-				Integer i = constantIntConverter.translate2Integer(tree
+				Integer i = Integer.parseInt(tree
 						.getData());
 				if (i != null) {
 					res = constant(i);
