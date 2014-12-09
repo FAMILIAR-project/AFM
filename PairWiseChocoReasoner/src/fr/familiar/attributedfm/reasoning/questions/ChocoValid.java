@@ -28,4 +28,9 @@ public class ChocoValid extends ChocoQuestion {
 
 		return null;
 	}
+
+	public boolean isValid() {
+		
+		return valid;
+	}
 }
