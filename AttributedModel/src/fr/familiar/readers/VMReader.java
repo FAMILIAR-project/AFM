@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
@@ -85,6 +84,7 @@ import fr.inria.lang.vM.Xorgroup;
 
 public class VMReader implements IReader {
 
+	fr.familiar.attributedfm.AttributedFeatureModel fm;
 	@Override
 	public AttributedFeatureModel parseFile(String fileName) throws Exception {
 		Injector injector = new VMStandaloneSetup().createInjectorAndDoEMFRegistration();
@@ -94,7 +94,7 @@ public class VMReader implements IReader {
 				true);
 		Model model = (Model) resource.getContents().get(0);
 		
-		fr.familiar.attributedfm.AttributedFeatureModel fm = new AttributedFeatureModel();
+		fm = new AttributedFeatureModel();
 
 		VmBlock relationships = null;
 		VmBlock attsblock =null;
@@ -122,10 +122,11 @@ public class VMReader implements IReader {
 				}
 			}
 		}
+		if(((Relationships) relationships)!=null){
 		FeatureHierarchy fhs= ((Relationships) relationships).getRoot();
 		fr.familiar.attributedfm.Feature ffeat = new fr.familiar.attributedfm.Feature(fhs.getParent().getName());
 		visitFeatureHierarchy(ffeat, fhs);
-		fm.setRoot(ffeat);
+		fm.setRoot(ffeat);}
 		if((Attributes) attsblock!=null){
 		visitAttributes(((Attributes) attsblock).getAttrDefs(), fm);
 		}
@@ -582,6 +583,11 @@ public class VMReader implements IReader {
 	@Override
 	public boolean canParse(String fileName) {
 		return false;
+	}
+	
+	public Collection<fr.familiar.attributedfm.Constraint> parseConstratins(String string) throws Exception {
+		this.parseFile(string);
+		return this.fm.getConstraints();
 	}
 
 }
