@@ -316,7 +316,7 @@ public class AttributedFeatureModel {
 	public void compose(AttributedFeatureModel fm2, Collection<Constraint> ctc){
 		System.err.println("Please, note that currently the use of this can end in unexpected behavious when using the choco solver");
 		//mergin off the trees
-		Feature newRoot = new Feature("Fake root");
+		Feature newRoot = new Feature("FakeRoot");
 		
 		Relation r = new Relation("oldmodelRel");
 		r.addCardinality(new Cardinality(1, 1));
@@ -327,9 +327,10 @@ public class AttributedFeatureModel {
 		r2.addCardinality(new Cardinality(1, 1));
 		r2.addDestination(fm2.root);
 		r2.setParent(newRoot);
-		
+		newRoot.addRelation(r);
+		newRoot.addRelation(r2);
 		this.root=newRoot;
-		
+
 		this.constraints.addAll(fm2.getConstraints());
 		this.constraints.addAll(ctc);
 		

@@ -4,12 +4,11 @@ import java.util.Collection;
 import fr.familiar.attributedfm.AttributedFeatureModel;
 import fr.familiar.attributedfm.Constraint;
 import fr.familiar.attributedfm.reasoning.ChocoReasoner;
-import fr.familiar.attributedfm.reasoning.questions.ChocoDead;
 import fr.familiar.attributedfm.reasoning.questions.ChocoValid;
 import fr.familiar.readers.VMReader;
 
 
-public class ValidComposeSimpleTest {
+public class DeadComposeSimpleTest {
 
 	public static void main(String[] args) throws Exception {
 		String model1="./Composition/afm1.vm";
@@ -22,14 +21,17 @@ public class ValidComposeSimpleTest {
 		
 		ChocoReasoner reasoner = new ChocoReasoner();
 		afm1.transformto(reasoner);
-		ChocoDead validq= new ChocoDead();
+		ChocoValid validq= new ChocoValid();
 		validq.answer(reasoner);
+		System.out.println("The model afm1 is valid:"+validq.isValid());
+		
 		
 		AttributedFeatureModel afm2 = reader.parseFile(model2);
 		reasoner = new ChocoReasoner();
 		afm2.transformto(reasoner);
-		ChocoDead validq2= new ChocoDead();
-		validq2.answer(reasoner);
+		validq= new ChocoValid();
+		validq.answer(reasoner);
+		System.out.println("The model afm2 is valid:"+validq.isValid());
 		
 		
 		Collection<Constraint> ctc = reader.parseConstratins(modelsset,"./Composition/ctcs.vm");
@@ -37,14 +39,9 @@ public class ValidComposeSimpleTest {
 		
 		reasoner = new ChocoReasoner();
 		afm1.transformto(reasoner);
-		ChocoDead validq3= new ChocoDead();
-		validq3.answer(reasoner);
-		System.out.println("This composition introduced the following deads in fm1: ");
-		validq3.deads.removeAll(validq.deads);
-		validq3.deads.removeAll(validq2.deads);
-		System.out.println(validq3.deads);
-		
-		
+		validq= new ChocoValid();
+		validq.answer(reasoner);
+		System.out.println("The composed model is valid:"+validq.isValid());
 	}
 
 }

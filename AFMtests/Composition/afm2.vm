@@ -1,0 +1,8 @@
+Relationships:
+A2{
+	B2
+	? C2
+}
+
+Constraints:
+B2 requires C2

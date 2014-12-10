@@ -85,15 +85,23 @@ import fr.inria.lang.vM.Xorgroup;
 public class VMReader implements IReader {
 
 	fr.familiar.attributedfm.AttributedFeatureModel fm;
+	Collection<String> models=null;
 	@Override
 	public AttributedFeatureModel parseFile(String fileName) throws Exception {
 		Injector injector = new VMStandaloneSetup().createInjectorAndDoEMFRegistration();
 		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL,	Boolean.TRUE);
-		Resource resource = resourceSet.getResource(URI.createURI(fileName),
-				true);
-		Model model = (Model) resource.getContents().get(0);
+		if(models!=null){
+			for(String s:models){
+				resourceSet.getResource(URI.createURI(s), true);
+
+			}
+		}
 		
+		Resource resource = resourceSet.getResource(URI.createURI(fileName), true);
+		
+		Model model = (Model) resource.getContents().get(0);
+
 		fm = new AttributedFeatureModel();
 
 		VmBlock relationships = null;
@@ -123,15 +131,16 @@ public class VMReader implements IReader {
 			}
 		}
 		if(((Relationships) relationships)!=null){
-		FeatureHierarchy fhs= ((Relationships) relationships).getRoot();
-		fr.familiar.attributedfm.Feature ffeat = new fr.familiar.attributedfm.Feature(fhs.getParent().getName());
-		visitFeatureHierarchy(ffeat, fhs);
-		fm.setRoot(ffeat);}
+			FeatureHierarchy fhs= ((Relationships) relationships).getRoot();
+			fr.familiar.attributedfm.Feature ffeat = new fr.familiar.attributedfm.Feature(fhs.getParent().getName());
+			visitFeatureHierarchy(ffeat, fhs);
+			fm.setRoot(ffeat);
+		}
 		if((Attributes) attsblock!=null){
-		visitAttributes(((Attributes) attsblock).getAttrDefs(), fm);
+			visitAttributes(((Attributes) attsblock).getAttrDefs(), fm);
 		}
 		if((Constraints) constratins!=null){
-		visitConstraints(((Constraints) constratins).getConstraints(),fm);
+			visitConstraints(((Constraints) constratins).getConstraints(),fm);
 		}
 		return fm;
 	}
@@ -585,8 +594,11 @@ public class VMReader implements IReader {
 		return false;
 	}
 	
-	public Collection<fr.familiar.attributedfm.Constraint> parseConstratins(String string) throws Exception {
-		this.parseFile(string);
+	public Collection<fr.familiar.attributedfm.Constraint> parseConstratins(Collection<String>models, String ctc) throws Exception {
+
+		this.models=models;
+		this.parseFile(ctc);
+		this.models=null;
 		return this.fm.getConstraints();
 	}
 

@@ -1,0 +1,12 @@
+Relationships:
+A{
+	B
+	C {
+		oneOf {
+			D
+			E	 		
+		}
+	}
+}
+Constraints:
+B excludes D
