@@ -1,0 +1,88 @@
+Relationships:
+sequence { 
+scene { 
+background
+? objects { 
+ someOf {vehicle1
+vehicle2
+vehicle3
+vehicle4
+vehicle5
+}? distractors
+? occultants
+ }
+ }
+capturingConditions { 
+camera
+capture
+ }
+signal_quality
+ }
+
+Attributes:
+int background.identifier [0..0] delta 1 default 0
+int vehicle1.shadowed [0..100] delta 1 default 25
+int vehicle1.speed [0..130] delta 1 default 40
+int vehicle1.trayectory [0..15] delta 1 default 0
+int vehicle1.dust [0..10] delta 1 default 50
+int vehicle1.appearance_change [0..100] delta 1 default 5
+int vehicle1.identifier [0..13] delta 1 default 0
+int vehicle1.size [0..10] delta 1 default 4
+int vehicle2.shadowed [0..100] delta 1 default 25
+int vehicle2.speed [0..130] delta 1 default 40
+int vehicle2.trayectory [0..15] delta 1 default 0
+int vehicle2.dust [0..10] delta 1 default 50
+int vehicle2.appearance_change [0..100] delta 1 default 5
+int vehicle2.identifier [0..13] delta 1 default 0
+int vehicle2.size [0..10] delta 1 default 4
+int vehicle3.shadowed [0..100] delta 1 default 25
+int vehicle3.speed [0..130] delta 1 default 40
+int vehicle3.trayectory [0..15] delta 1 default 0
+int vehicle3.dust [0..10] delta 1 default 50
+int vehicle3.appearance_change [0..100] delta 1 default 5
+int vehicle3.identifier [0..13] delta 1 default 0
+int vehicle3.size [0..10] delta 1 default 4
+int vehicle4.shadowed [0..100] delta 1 default 25
+int vehicle4.speed [0..130] delta 1 default 40
+int vehicle4.trayectory [0..15] delta 1 default 0
+int vehicle4.dust [0..10] delta 1 default 50
+int vehicle4.appearance_change [0..100] delta 1 default 5
+int vehicle4.identifier [0..13] delta 1 default 0
+int vehicle4.size [0..10] delta 1 default 4
+int vehicle5.shadowed [0..100] delta 1 default 25
+int vehicle5.speed [0..130] delta 1 default 40
+int vehicle5.trayectory [0..15] delta 1 default 0
+int vehicle5.dust [0..10] delta 1 default 50
+int vehicle5.appearance_change [0..100] delta 1 default 5
+int vehicle5.identifier [0..13] delta 1 default 0
+int vehicle5.size [0..10] delta 1 default 4
+int distractors.light_reflection [0..100] delta 1 default 0
+int distractors.blinking_light [0..100] delta 1 default 0
+int distractors.far_moving_vegetation [0..100] delta 1 default 0
+int distractors.bird_level [0..100] delta 1 default 0
+int distractors.butterfly_level [0..100] delta 1 default 0
+int distractors.close_moving_vegetation [0..100] delta 1 default 0
+int occultants.semi_transparent_level [0..100] delta 1 default 2
+int occultants.solid_level [0..100] delta 1 default 2
+int camera.focal_change [0..100] delta 1 default 0
+int camera.tilt_motion [0..100] delta 1 default 0
+int camera.pan_motion [0..100] delta 1 default 0
+int camera.altitude [0..100] delta 1 default 0
+int camera.vibration [0..100] delta 1 default 0
+int capture.global_light_change_level [0..100] delta 1 default 0
+int capture.heat_haze_level [0..100] delta 1 default 0
+int capture.shadow_level [0..100] delta 1 default 0
+int capture.local_light_change_level [0..100] delta 1 default 0
+int signal_quality.chrominance_U_dev [0..16] delta 1 default 8
+int signal_quality.blur_level [0..100] delta 1 default 2
+int signal_quality.compression_artefact_level [0..100] delta 1 default 2
+int signal_quality.parasitics_level [0..100] delta 1 default 2
+int signal_quality.chrominance_U_mean [112..140] delta 1 default 128
+int signal_quality.chrominance_V_mean [112..140] delta 1 default 128
+int signal_quality.chrominance_V_dev [0..16] delta 1 default 8
+int signal_quality.dynamic_noise_level [0..100] delta 1 default 2
+int signal_quality.frame_instability [0..100] delta 1 default 2
+int signal_quality.line_instability [0..100] delta 1 default 2
+int signal_quality.static_noise_level [0..100] delta 1 default 2
+int signal_quality.luminance_mean [0..32] delta 1 default 72
+int signal_quality.luminance_dev [0..8] delta 1 default 48

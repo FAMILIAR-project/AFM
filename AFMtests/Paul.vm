@@ -1,0 +1,84 @@
+package fr.inria.lang.vm.examples.OpenCV
+
+@name "OpenCV Video-Analizer"
+@version 1
+@description "This model encodes the variability existing in the OpenCV Video Analizer"
+@author "José A. Galindo & Paul Temple"
+@email jaglaindo@inria.fr
+@organization "INRIA, Rennes, France"
+@date "October, 2015"
+
+Relationships:
+OpenCV{
+	BackgroundSubtractionMethod {
+		oneOf{
+			KNN 
+			MOG2
+			GMG
+			MOG
+			FGD
+		}
+	}
+	?MorphologicalOperators{
+		?Dilate{
+			?Erode
+		}	
+	}
+	ContoursRetrieval 
+	?Filter{
+		ContoursLenght
+		ContoursArea
+	}
+	?MerginBoundingBoxes
+}
+
+
+Attributes:
+int background.identifier [0..0] delta 1 default 0
+
+int ContoursLenght.width
+int ContoursLenght.height
+int ContoursArea.width
+int ContoursArea.height
+int ContoursRetrieval.width:Integer
+int ContoursRetrieval.height:Integer
+enum ContoursRetrieval.mode: ["list","external","ccomp","tree"]
+int ContoursRetrieval.offsetWidth:Integer
+int ContoursRetrieval.offsetHeight:Integer
+enum ContoursRetrieval.approximation: ["none","simple","L1","K_cos"]
+int MerginBoundingBoxes.scanlingFactor: Integer
+MerginBoundingBoxes.maxDistance: Float
+boolean MerginBoundingBoxes.nb_loop: Boolean
+int Dilate.width:Integer
+int Dilate.height:Integer
+enum Dilate.shape: ["rectangle", "ellipse", "cross", "custom"]
+int Dilate.anchor: Integer
+int Erode.height:Integer
+int Erode.width:Integer
+enum Erode.shape: ["rectangle", "ellipse", "cross", "custom"]
+int Erode.anchor: Integer [0 to 1080], 0, 0;
+int KNN.nb_frame:Integer
+KNN.thresholdSquare: Float
+boolean KNN.detectShadows:Boolean
+int GMG.nb_frame:Integer
+GMG.decisionThreshold: Float
+int MOG.nb_frame:Integer
+int MOG.nb_mixture:Integer
+MOG.decisionThreshold: Float
+MOG.noiseRob: Float
+int MOG2.nb_frame:Integer
+MOG2.thresholdSquare: Float
+boolean MOG2.detectShadows:Bool
+FDG.alpha1: Float
+FDG.alpha2: Float
+FDG.alpha3: Float
+FDG.delta: Float
+boolean FDG.is_obj_without_holes
+FDG.lc: [2,4,6,8,16,32,64,128,256]
+FDG.lcc: [2,4,6,8,16,32,64,128]
+FDG.minArea: Float
+int FDG.n1c: Integer
+int FDG.n1cc: Integer
+int FDG.n2c: Integer
+int FDG.n2cc: Integer
+FDG.t: Float
