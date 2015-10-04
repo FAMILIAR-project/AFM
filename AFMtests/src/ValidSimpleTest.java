@@ -9,7 +9,7 @@ public class ValidSimpleTest {
 	public static void main(String[] args) throws Exception {
 		
 		VMReader reader = new VMReader();
-		AttributedFeatureModel parseFile = reader.parseFile("ISSTA2014.vm");
+		AttributedFeatureModel parseFile = reader.parseFile("Paul.vm");
 		
 		ChocoReasoner reasoner = new ChocoReasoner();
 		parseFile.transformto(reasoner);
