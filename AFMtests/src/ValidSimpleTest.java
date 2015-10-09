@@ -9,6 +9,7 @@ public class ValidSimpleTest {
 	public static void main(String[] args) throws Exception {
 		
 		VMReader reader = new VMReader();
+		reader.fakeRealSupport=true;
 		AttributedFeatureModel parseFile = reader.parseFile("Paul.vm");
 		
 		ChocoReasoner reasoner = new ChocoReasoner();

@@ -21,10 +21,11 @@
  */
 package fr.familiar.attributedfm;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 
@@ -35,45 +36,56 @@ public class Product {
 	
 	protected String name;
 	
-	public  Integer value;
-	protected List<Feature> listOfFeatures;
+	protected Map<VariabilityElement,Object> listOfElemets;
 	
-	public Product () {
-		listOfFeatures = new ArrayList<Feature>();
+	public Map<VariabilityElement, Object> getListOfElemets() {
+		return listOfElemets;
 	}
-	
-	public int getNumberOfFeatures() {
-		return listOfFeatures.size();
-	}
-	
 
+	public Product () {
+		listOfElemets = new HashMap<VariabilityElement,Object>();
+	}
+	
+	public int getNumberOfElements() {
+		return listOfElemets.size();
+	}
 	
 	public void addFeature (Feature f) {
-		listOfFeatures.add(f);
+		listOfElemets.put(f,1);
 	}
 	
-	public Collection<Feature> getFeatures(){
-		return listOfFeatures;
+	public void addElement (VariabilityElement f,Object i) {
+		listOfElemets.put(f,i);
+	}
+	public Collection<VariabilityElement> getElements(){
+		return listOfElemets.keySet();
 	}
 	
-	public boolean equals(Object p){
-		boolean eq=false;
-		if (p instanceof Product){
-			Collection<? extends VariabilityElement> listOfFeat1=((Product) p).getFeatures();
-			if(listOfFeat1.containsAll(listOfFeatures)&&listOfFeatures.containsAll(listOfFeat1))
-				eq=true;
-		}
-		
-		return eq;
-	}
+//	public boolean equals(Object p){
+//		boolean eq=false;
+//		if (p instanceof Product){
+//			Collection<? extends VariabilityElement> listOfFeat1=((Product) p).getFeatures();
+//			if(listOfFeat1.containsAll(listOfFeatures)&&listOfFeatures.containsAll(listOfFeat1))
+//				eq=true;
+//		}
+//		
+//		return eq;
+//	}
 	
 	@Override
 	public String toString(){
-		Iterator<Feature> it = listOfFeatures.iterator();
+		Iterator<Entry<VariabilityElement,Object>> it = listOfElemets.entrySet().iterator();
 		String str="";
 		while  (it.hasNext()){
-			VariabilityElement feat = it.next();
-			String str2=feat.getName();
+			Entry<VariabilityElement,Object> entry = it.next();
+			String str2="";
+			if(entry.getKey() instanceof Feature){
+				str2=entry.getKey().getName();	
+			}else if(entry.getKey() instanceof GenericAttribute){
+				GenericAttribute att=(GenericAttribute) entry.getKey();
+				str2=att.getFullName()+"="+entry.getValue().toString();
+				
+			}
 			str+=str2+";";
 		
 		}
@@ -82,13 +94,10 @@ public class Product {
 		
 	}
 
-	public boolean removeFeature(Feature f) {
-		return listOfFeatures.remove(f);
+	public boolean removeFeature(VariabilityElement f,Object o) {
+		return listOfElemets.remove(f, o);
 	}
 
-	public void addAllFeatures(Collection<Feature> allFeatures) {
-		listOfFeatures.addAll(allFeatures);
-	}
 
 	public String getName() {
 		return name;

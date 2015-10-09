@@ -289,7 +289,7 @@ public class ChocoReasoner extends FeatureModelReasoner {
 					i++;
 				}
 				if(att.nonDesicion){
-					attVar = makeIntVar(attName, valsArray, "cp:enum","cp:no_decision");
+						attVar = makeIntVar(attName, valsArray, "cp:enum","cp:no_decision");
 					}else{
 						attVar = makeIntVar(attName, valsArray, "cp:enum");
 					}
@@ -299,8 +299,11 @@ public class ChocoReasoner extends FeatureModelReasoner {
 			// a?????????adimos la IntegerVariable
 			attVars.put(attName, attVar);
 			atts.put(attName, att);
-			problem.addVariable(attVar);
-
+			try{
+				problem.addVariable(attVar);
+			}catch (NullPointerException e) {
+				throw new IllegalStateException("the variable "+ attName +"failed");
+			}
 			// si la feature esta presente, tenemos en cuenta el dominio. si no,
 			// valor nulo
 			//Constraint domain = setAttributeDomain(attVar, att);
@@ -388,6 +391,16 @@ public class ChocoReasoner extends FeatureModelReasoner {
 		return features.get(id);
 	}
 
+	public VariabilityElement searchFeatureOrAttibuteByName(String id) {
+		
+		GenericAttribute genericAttribute = atts.get(id);
+			if(genericAttribute==null){
+				return features.get(id);
+			}else{
+				return genericAttribute;
+			}
+		}
+	
 	public Collection<Feature> getAllFeatures() {
 		return this.features.values();
 	}

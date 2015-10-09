@@ -34,50 +34,49 @@ OpenCV{
 
 
 Attributes:
-int background.identifier [0..0] delta 1 default 0
-int ContoursLenght.width [0..0] delta 1 default 0
-int ContoursLenght.height [0..0] delta 1 default 0
-int ContoursArea.width [0..0] delta 1 default 0
-int ContoursArea.height [0..0] delta 1 default 0
-int ContoursRetrieval.width [0..0] delta 1 default 0
-int ContoursRetrieval.height [0..0] delta 1 default 0
-enum ContoursRetrieval.mode [0..0] delta 1 default 0
-int ContoursRetrieval.offsetWidth [0..0] delta 1 default 0
-int ContoursRetrieval.offsetHeight [0..0] delta 1 default 0
-enum ContoursRetrieval.approximation: ["none","simple","L1","K_cos"]
-int MerginBoundingBoxes.scanlingFactor [0..0] delta 1 default 0
-real MerginBoundingBoxes.maxDistance
+int ContoursLenght.width [0 .. 15] delta 1 default 0
+int ContoursLenght.height [0 .. 1] delta 1 default 0
+int ContoursArea.width [0 .. 1] delta 1 default 0
+int ContoursArea.height [0 .. 1] delta 1 default 0
+int ContoursRetrieval.width [0 .. 1] delta 1 default 0
+int ContoursRetrieval.height [0 .. 1] delta 1 default 0
+enum ContoursRetrieval.mode [0 .. 1] delta 1 default 0
+int ContoursRetrieval.offsetWidth [0 .. 1] delta 1 default 0
+int ContoursRetrieval.offsetHeight [0 .. 1] delta 1 default 0
+enum ContoursRetrieval.approximation ["none","simple","L1","K_cos"]
+int MerginBoundingBoxes.scanlingFactor [0 .. 1] delta 1 default 0
+real MerginBoundingBoxes.maxDistance [2 .. 3] delta 1
 boolean MerginBoundingBoxes.nb_loop
-int Dilate.width [0..0] delta 1 default 0
-int Dilate.height [0..0] delta 1 default 0
-enum Dilate.shape: ["rectangle", "ellipse", "cross", "custom"]
-int Dilate.anchor: Integer
-int Erode.height [0..0] delta 1 default 0
-int Erode.width [0..0] delta 1 default 0
+int Dilate.width [0 .. 1] delta 1 default 0
+int Dilate.height [0 .. 1] delta 1 default 0
+enum Dilate.shape ["rectangle", "ellipse", "cross", "custom"]
+int Dilate.anchor [0 .. 1] delta 1 default 0
+int Erode.height [0 .. 1] delta 1 default 0
+int Erode.width [0 .. 1] delta 1 default 0
 enum Erode.shape: ["rectangle", "ellipse", "cross", "custom"]
-int Erode.anchor: Integer [0 to 1080], 0, 0;
-int KNN.nb_frame [0..0] delta 1 default 0
-real KNN.thresholdSquare
+int Erode.anchor: [0 .. 1080] delta 1 default 0
+int KNN.nb_frame [0 .. 1] delta 1 default 0
+real KNN.thresholdSquare [2 .. 3] delta 1
 boolean KNN.detectShadows:Boolean
-int GMG.nb_frame [0..0] delta 1 default 0
-real GMG.decisionThreshold
-int MOG.nb_frame [0..0] delta 1 default 0
-int MOG.nb_mixture [0..0] delta 1 default 0
-real MOG.decisionThreshold
-real MOG.noiseRob
-int MOG2.nb_frame [0..0] delta 1 default 0
-real MOG2.thresholdSquare
-boolean MOG2.detectShadows
-real FDG.alpha1 [0..8] delta 1 default 48
-real FDG.alpha2 [0..8] delta 1 default 48
-real FDG.alpha3 [0..8] delta 1 default 48
-real FDG.delta [0..8] delta 1 default 48
+int GMG.nb_frame [0 .. 1] delta 1 default 0
+real GMG.decisionThreshold [2.5 .. 3] delta 1
+int MOG.nb_frame [0 .. 1] delta 1 default 0
+int MOG.nb_mixture [0 .. 1] delta 1 default 0
+real MOG.decisionThreshold [2.5 .. 3]
+real MOG.noiseRob [2.5 .. 3] delta 1
+int MOG2.nb_frame [0 .. 1] delta 1 default 0
+real MOG2.thresholdSquare [2.5 .. 3]
+boolean MOG2.detectShadows [2.5 .. 3]
+real FDG.alpha1 [0 .. 8] delta 1 default 48
+real FDG.alpha2 [0 .. 8] delta 1 default 48
+real FDG.alpha3 [0 .. 8] delta 1 default 48
+real FDG.delta [0 .. 8] delta 1 default 48
 boolean FDG.is_obj_without_holes
-FDG.lc: [2,4,6,8,16,32,64,128,256]
-FDG.lcc: [2,4,6,8,16,32,64,128]
-real FDG.minArea [0..8] delta 1 default 48
-int FDG.n1c [0..0] delta 1 default 0
-int FDG.n1cc [0..0] delta 1 default 0
-int FDG.n2c [0..0] delta 1 default 0
-int FDG.n2cc [0..0] delta 1 default 0
-real FDG.t [0..8] delta 1 default 48
+enum FDG.lc [2,4,6,8,16,32,64,128,256]
+enum FDG.lcc [2,4,6,8,16,32,64,128]
+real FDG.minArea [0 .. 8] delta 1 default 48
+int FDG.n1c [0 .. 1] delta 1 default 0
+int FDG.n1cc [0 .. 2] delta 1 default 0
+int FDG.n2c [0 .. 1] delta 1 default 0
+int FDG.n2cc [0 .. 1] delta 1 default 0
+real FDG.t [0 .. 8] delta 1 default 4

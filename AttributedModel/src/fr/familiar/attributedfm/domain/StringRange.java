@@ -12,15 +12,14 @@ public class StringRange extends IntegerRange {
 		this.strings= new HashMap<Integer,String>();
 	}
 	
-	public StringRange (Collection<String> strings){
+	public StringRange (Collection strings){
 		this.strings= new HashMap<Integer,String>();	
 		int i=1;
-		for(String str:strings){
-			this.strings.put(i, str);
+		for(Object str:strings){
+			this.strings.put(i, str.toString());
 		}
 		
 	}
-	
 	@Override
 	public Collection<Integer> getItems() {
 		return this.strings.keySet();
