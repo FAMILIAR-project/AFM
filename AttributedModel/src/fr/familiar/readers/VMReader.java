@@ -461,7 +461,7 @@ public class VMReader implements IReader {
 						// ranges.add(new RealRange(floats));
 					}
 					Collection<Integer> integerCol = new ArrayList<Integer>();
-					for (int i = 0; i <= intIndex; i++) {
+					for (int i = 0; i < intIndex; i++) {
 						integerCol.add(i);
 					}
 					ranges.add(new IntegerRange(integerCol));
