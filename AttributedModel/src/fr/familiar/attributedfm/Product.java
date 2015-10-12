@@ -80,13 +80,13 @@ public class Product {
 			Entry<VariabilityElement,Object> entry = it.next();
 			String str2="";
 			if(entry.getKey() instanceof Feature){
-				str2=entry.getKey().getName();	
+				str2=entry.getKey().getName()+"="+entry.getValue().toString();	
 			}else if(entry.getKey() instanceof GenericAttribute){
 				GenericAttribute att=(GenericAttribute) entry.getKey();
 				str2=att.getFullName()+"="+entry.getValue().toString();
 				
 			}
-			str+=str2+";";
+			str+=str2+"\r\n";
 		
 		}
 		return str;
